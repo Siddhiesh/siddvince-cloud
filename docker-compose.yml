@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: siddvince
+      POSTGRES_USER: siddvince
+      POSTGRES_PASSWORD: change-me-now
+    volumes:
+      - siddvince_pg:/var/lib/postgresql/data
+  api:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://siddvince:change-me-now@db:5432/siddvince
+    depends_on:
+      - db
+volumes:
+  siddvince_pg:
